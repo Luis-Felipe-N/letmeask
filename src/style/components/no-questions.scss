@@ -1,0 +1,16 @@
+@import '../utils/mixins.scss';
+@import '../utils/variables.scss';
+
+.no-questions {
+    @include center;
+    margin-top: 64px;
+
+    &-content {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+        max-width: 380px;
+        gap: 1rem;
+    }
+}

@@ -1,0 +1,35 @@
+@import '../utils/variables';
+@import '../utils/mixins';
+
+.room-code {
+    display: flex;
+
+    height: 40px;
+
+    border: 1px solid $color-primary;
+    border-radius: 8px;
+
+    overflow: hidden;
+
+    background-color: #fff;
+
+    cursor: pointer;
+
+    div {
+        @include center;
+        background-color: $color-primary;
+        box-shadow: -20px 0 0 20px $color-primary;
+        padding: 0 12px;
+        height: 100%;
+    }
+    
+    span {
+        display: block;
+        align-self: center;
+        flex: 1;
+        padding: 0 1rem;
+        font-size: 14px;
+        font-weight: 500;
+        text-overflow: ellipsis;
+    }
+}

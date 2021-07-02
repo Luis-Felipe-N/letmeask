@@ -1,0 +1,118 @@
+@import '../utils/mixins';
+@import '../utils/variables';
+
+.room {
+
+    padding: 1.7rem 8%;
+
+    &__header {
+        .content {
+            max-width: 920px;
+            width: 100%;
+            margin: auto;
+            @include center-between;
+            gap: 1rem;
+        }
+
+        &-logo {
+            max-height: 45px;
+            height: 100%;
+        }
+
+        &-code {
+            font-size: 14px;
+            border: 2px solid $color-primary;
+            border-radius: 8;
+            height: 40px;
+            width: 160px;
+            @include center;
+        }
+
+        &-btns {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+    }
+
+    &__main {
+        max-width: 800px;
+        margin: 0 auto;
+
+        form {
+            
+            textarea {
+                padding: 1rem;
+                box-shadow: 0 2px 12px rgba(0, 0, 0, 0.11);
+                border: 0;
+                border-radius: 8px;
+                resize: vertical;
+                width: 100%;
+                min-height: 133px;
+            }
+
+            .form-footer {
+                margin-top: 16px;
+                width: 100%;
+                @include center-between;
+                gap: 1rem;
+
+                .form-login {
+                    font-size: 14px;
+                    font-weight: 500;
+
+                    button {
+                        background: transparent;
+                        border: 0;
+                        color: $color-primary;
+                        text-decoration: underline;
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+
+        .container-questions {
+            margin-top: 32px;
+        }
+    }
+
+    &-title {
+        @include al-center;
+        margin: 32px 0 24px;
+
+        h1 {
+            margin-right: 16px;
+            font-size: 24px;
+            font-family: $font-poppins;
+            color: $color-dark-gray;
+        }
+
+        span {
+            background-color: $color-secondary;
+            color: $color-white;
+            padding: .5rem 1rem;
+            border-radius: 2rem;
+            font-size: 14px;
+            font-weight: 500;
+        }
+    }
+}
+
+@media (max-width: 700px) {
+    .room {
+        .form-footer {
+            flex-direction: column;
+    
+            .button {
+                width: 100% !important;
+            }
+        }
+    
+        &-title {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 1rem;
+        }
+    }
+}

@@ -1,0 +1,33 @@
+@import '../utils/variables';
+
+.button {
+    height: 50px;
+
+    padding: 0 32px;
+    
+
+    border-radius: 8px;
+    border: 0;
+
+    background-color: $color-primary;
+    color: $color-white;
+
+    cursor: pointer;
+
+    transition: filter .2s;
+
+    &:not(:disabled):hover {
+        filter: brightness(0.9);
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    &.outline {
+        background-color: $color-white;
+        color: $color-primary;
+        border: 1px solid $color-primary;
+    }
+}

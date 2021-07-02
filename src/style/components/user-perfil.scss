@@ -1,0 +1,15 @@
+@import '../utils/mixins.scss';
+@import '../utils/variables.scss';
+
+.user {
+    @include al-center;
+
+    &__avatar {
+        border-radius: 100%;
+        height: 32px;
+        width: 32px;
+        margin-right: 16px;
+        font-size: 14px;
+        font-weight: 500;
+    }
+}

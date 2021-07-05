@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import { useParams, Link, useHistory } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 import { Button } from '../components/Button'
 import { RoomCode } from '../components/RoomCode'
@@ -9,6 +10,8 @@ import { Question } from '../components/Question'
 
 // css
 import '../style/pages/room.scss'
+import 'react-toastify/dist/ReactToastify.css';
+
 import logoImg from '../assets/image/logo.svg'
 import { useAuth } from '../hooks/useAuth'
 import { useRoom } from '../hooks/useRoom'
@@ -26,11 +29,23 @@ export function Room() {
 
 
     useEffect( async () => {
-        const roomRef = await database.ref(`rooms/${ roomId }`).get()
 
-        if ( roomRef.val().closedAt ) {
-            history.push('/')
-        }
+        const roomRef = await database.ref(`rooms/${ roomId }`)
+
+        roomRef.on('value', ( snapshot ) => {
+            if( snapshot.val().closedAt ) {
+                history.push('/')
+                toast.warn('Sala excluida pelo administrador!', {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+          })
     }, [ roomId ])
 
 
@@ -51,7 +66,7 @@ export function Room() {
             isAnswered: false
         }
 
-        await database.ref(`rooms/${roomId}/questions`).push(question)
+        await (await database.ref(`rooms/${roomId}/questions`).push(question)).endBefore
 
         setNewQuestion('')
     }
@@ -62,7 +77,7 @@ export function Room() {
     }
 
 
-    async function handleLikeQuestion( questionId, likeId, event ) {
+    async function handleLikeQuestion( questionId, likeId ) {
 
         if ( likeId ) {
             await database.ref(`/rooms/${roomId}/questions/${questionId}/likes/${likeId}`).remove()
@@ -110,7 +125,7 @@ export function Room() {
                 <section className="container-questions">
                 {
                     questions.length > 0 ? 
-                    questions.map( ({ id, author, content, likeId, likeCount, isHighLighted, isAnswered }) => 
+                    questions.reverse().map( ({ id, author, content, likeId, likeCount, isHighLighted, isAnswered }) => 
                     <Question
                         key={id}
                         author={author} 

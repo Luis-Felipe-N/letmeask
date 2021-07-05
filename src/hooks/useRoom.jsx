@@ -24,7 +24,6 @@ export function useRoom( roomId ) {
                         likeId: Object.entries(likes ?? {}).find( ([key, like]) => like.authorId === user?.id )?.[0]
                     }
                 })
-            console.log(    paserdQuestion )
             setQuestions( paserdQuestion )
             setTitle(room.val().title)
         })

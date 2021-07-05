@@ -1,5 +1,5 @@
-import { useState } from "react"
 import { Link, useHistory, useParams } from "react-router-dom"
+import { toast } from 'react-toastify'
 
 import { Button } from "../components/Button"
 import { RoomCode } from "../components/RoomCode"
@@ -11,6 +11,8 @@ import { useRoom } from '../hooks/useRoom'
 import { database } from '../services/firebase'
 
 import '../style/pages/room.scss'
+import 'react-toastify/dist/ReactToastify.css';
+
 import logoImg from '../assets/image/logo.svg'
 
 
@@ -24,19 +26,39 @@ export function AdminRoom() {
 
     async function handleRemoveRoom( ) {
 
-        const closeRoom = handleModalCloseRoom()
+        const closeRoom = window.confirm("Dejesa excluir essa sala?")
 
         if ( closeRoom ) {
             await database.ref(`rooms/${roomId}`).update({
                 closedAt: new Date()
             })
             history.push('/')
+            toast.success('Sala excluida com sucesso!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
         }
     }
 
     async function handleRemoveQuestions( questionId ) {
-        await database.ref(`rooms/${ roomId }/questions/${ questionId }`).remove()
-        console.log( questionId )
+        const canRemoveQuestion = window.confirm("Dejesa excluir essa pergunta?")
+        if ( canRemoveQuestion ) {
+            await database.ref(`rooms/${ roomId }/questions/${ questionId }`).remove()
+            toast.success('Pergunta excluida com sucesso!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
+        }
     }
 
     async function handleHighLighted( questionId, isHighLighted ) {
@@ -58,9 +80,6 @@ export function AdminRoom() {
             })        
     }
 
-    function handleModalCloseRoom() {
-        
-    }
 
     return (
         <div className="room">
@@ -85,7 +104,7 @@ export function AdminRoom() {
             <section className="container-questions">
             {
                 questions.length > 0 ? 
-                questions.map( ( { id, content, author, isHighLighted, isAnswered } ) => 
+                questions.reverse().map( ( { id, content, author, isHighLighted, isAnswered } ) => 
                 <Question
                     key={id}
                     author={author} 

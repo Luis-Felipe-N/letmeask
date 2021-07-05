@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import { useHistory } from 'react-router-dom'
+import { toast, toastify } from 'react-toastify'
 
 import { useAuth } from '../hooks/useAuth'
 import { Button } from '../components/Button'
@@ -9,16 +10,27 @@ import illustrationImg from '../assets/image/illustration.svg'
 import logoImg from '../assets/image/logo.svg'
 import googleImg from '../assets/image/google-icon.svg'
 import '../style/pages/createroom.scss'
+import 'react-toastify/dist/ReactToastify.css';
+
 import { database } from '../services/firebase'
 
 export function Home() {
     const [ codeRoom, setCodeRoom ] = useState('')
     const history =  useHistory()
     const { user, signInwithGoogle } = useAuth()
+    toast.configure()
 
     async function handleCreateRoom() {
         if (!user) {
-            console.log('usuario não estava cadastrado')
+            toast.error('Usuário não cadastrado', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
             await signInwithGoogle()
         }
     
@@ -32,15 +44,36 @@ export function Home() {
         const roomRef = await database.ref(`rooms/${codeRoom}`).get()
 
         if ( !roomRef.exists() ) {
-            throw Error('Sala inexistente!')
+            toast.error('Essa sala não existe!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
         }
 
         if ( roomRef.val().closedAt ) {
-            alert('Sala inexistente!')
+            toast.error(handleFormatMinutes( roomRef.val().closedAt ), {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
             return
         }
 
         history.push(`/rooms/${codeRoom}`)
+    }
+
+    function handleFormatMinutes( exclusionTime ) {
+        const minutos = new Date( new Date() - Date.parse( exclusionTime ) ).getMinutes()
+        return minutos ? `Essa sala foi execluida a ${ minutos } minutos atrás!` : 'Essa sala acabou de ser excluida!'
     }
 
     return (

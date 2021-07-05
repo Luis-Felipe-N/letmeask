@@ -23,10 +23,15 @@ export function AdminRoom() {
     const { questions, title } = useRoom( roomId )
 
     async function handleRemoveRoom( ) {
-        await database.ref(`rooms/${roomId}`).update({
-            closedAt: new Date()
-        })
-        history.push('/')
+
+        const closeRoom = handleModalCloseRoom()
+
+        if ( closeRoom ) {
+            await database.ref(`rooms/${roomId}`).update({
+                closedAt: new Date()
+            })
+            history.push('/')
+        }
     }
 
     async function handleRemoveQuestions( questionId ) {
@@ -51,6 +56,10 @@ export function AdminRoom() {
                 isAnswered: true,
                 isHighLighted: false
             })        
+    }
+
+    function handleModalCloseRoom() {
+        
     }
 
     return (
